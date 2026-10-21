@@ -59,6 +59,7 @@ jobs:
         # cada ERRO dos testes (com as linhas de detalhe logo abaixo dele) vira um aviso no resumo da execucao,
         # assim da pra ver o motivo da falha sem abrir o log inteiro
         run: |
+          set -o pipefail   # sem isto o resultado seria o do tee (sempre 0) e uma falha passaria batido
           if bash tests/teste.sh teste:ci 2>&1 | tee teste.log; then st=0; else st=$?; fi
           awk '
             function sai() { if (msg != "") print "::error title=Teste::" msg; msg = "" }

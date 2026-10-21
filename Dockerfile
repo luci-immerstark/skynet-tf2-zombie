@@ -53,6 +53,11 @@ ENV RCON_PASSWORD="" \
     DOWNLOAD_URL="" \
     SM_ADMINS=""
 
+# O atualizador automatico do SourceMod (update.sourcemod.net) passou a responder 404 e registra erro a cada mapa.
+# Numa imagem Docker a atualizacao ja vem pela montagem diaria com a base nova, entao ele fica desligado.
+RUN sed -i -E 's/^([[:space:]]*"DisableAutoUpdate"[[:space:]]+)"no"/\1"yes"/' ${SM}/configs/core.cfg \
+ && grep -qE '^[[:space:]]*"DisableAutoUpdate"[[:space:]]+"yes"' ${SM}/configs/core.cfg
+
 USER tf2
 ENTRYPOINT ["/home/tf2/server/skynet-entrypoint.sh"]
 CMD ["+sv_pure", "1", "+map", "zi_atoll", "+maxplayers", "24"]
